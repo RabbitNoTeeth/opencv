@@ -1,6 +1,7 @@
 import cv2
 from learning_opencv3_with_python.chapter2.cameo.CaptureManager import CaptureManager
 from learning_opencv3_with_python.chapter2.cameo.WindowManager import WindowManager
+from learning_opencv3_with_python.chapter2.cameo.filters import *
 
 
 class Cameo(object):
@@ -8,6 +9,7 @@ class Cameo(object):
     def __init__(self):
         self._windowManager = WindowManager('Cameo', self.onKeyPress)
         self._captureManager = CaptureManager(cv2.VideoCapture(0), self._windowManager, True)
+        self._curveFilter = EmbossFilter()
 
     def run(self):
         self._windowManager.createWindow()
@@ -15,7 +17,10 @@ class Cameo(object):
             self._captureManager.enterFrame()
             frame = self._captureManager.frame
 
-            # todo
+            # -----
+            strokeEdges(frame, frame)
+            self._curveFilter.apply(frame, frame)
+            # -----
 
             self._captureManager.exiFrame()
             self._windowManager.processEvents()
